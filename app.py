@@ -10,5 +10,13 @@ cantidad_de_personas_por_comuna = Permanencias.objects.values('comuna').filter(p
     cantidad_hombres=Count('pk',filter=Q(sexo='Masculino'))
     )
 
-for item in cantidad_de_personas_por_comuna:
-    print(f'comuna: {item["comuna"]} mujeres: {item["cantidad_mujeres"]} hombres: {item["cantidad_hombres"]}')
+cantidad_de_personas_por_pais = Permanencias.objects.values('pais').annotate(
+    cantidad_mujeres=Count('pk',filter=Q(sexo='Femenino')),
+    cantidad_hombres=Count('pk',filter=Q(sexo='Masculino'))
+).order_by('-cantidad_mujeres')
+
+for personas in cantidad_de_personas_por_pais:
+    print(f'pais: {personas["pais"]} mujeres: {personas["cantidad_mujeres"]} hombres: {personas["cantidad_hombres"]}')
+
+# for personas in cantidad_de_personas_por_comuna:
+#     print(f'comuna: {personas["comuna"]} mujeres: {personas["cantidad_mujeres"]} hombres: {personas["cantidad_hombres"]}')
